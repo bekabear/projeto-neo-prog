@@ -1,4 +1,4 @@
-import Path from 'node:path'
+/* import Path from 'node:path'
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url';
 
@@ -14,9 +14,9 @@ export class DataService {
     carregarDados() {
         if (!fs.existsSync(this.FILE_PATH)) {
             fs.writeFileSync(this.FILE_PATH, JSON.stringify({
-                bicicletas: [],
-                clientes: [],
-                reservas: [],
+                estoque: [],
+                produtos: [],
+                usuarios: [],
             },null,2))
         }
         return JSON.parse(fs.readFileSync(this.FILE_PATH, 'utf-8'))
@@ -25,4 +25,4 @@ export class DataService {
     salvarDados(dados) {
         fs.writeFileSync(this.FILE_PATH, JSON.stringify(dados, null, 2))
     }
-}
+} */

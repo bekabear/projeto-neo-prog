@@ -13,7 +13,7 @@ const config = {
       host: 'localhost',
       user: 'root',
       password: 'root',
-      database: 'bike_facil_api'
+      database: 'controle_estoque_api'
     },
     migrations: {
       directory: path.join("./src/database/knex/migrations")
