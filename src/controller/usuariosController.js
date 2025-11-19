@@ -2,7 +2,7 @@ import UsuarioRepository from "../repository/UsuariosRepository.js"
 
 const usuarioRepository = new UsuarioRepository();
 
-export async function getaAllUsuarios(req, res) {
+export async function getAllUsuarios(req, res) {
    try {
     const usuarios = await usuarioRepository.listAllUsuarios();
     return res.status(200).json(usuarios);
@@ -23,7 +23,7 @@ export async function getByIdUsuarios(req, res) {
   }
 }
 
-export async function createUsuario(req, res) {
+export async function createUsuarios(req, res) {
   try {
     const { nome, email, tipo } = req.body;
     await usuarioRepository.createClientes(nome, email, tipo);

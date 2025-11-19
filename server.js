@@ -1,7 +1,8 @@
 import express from "express";
 import { DataService } from "./src/services/dataservice.js";
-
-import { getAllProducts } from "./src/controller/podutosController.js";
+import { createProducts, deleteProducts, getAllProducts, getByIdProducts, getByTypeProducts, updateProducts, } from "./src/controller/podutosController.js";
+import { createEstoque, deleteEstoque, getAllEstoque, getByIdEstoque, getEstoqueByProduct, updateLocal, updateQuantidade } from "./src/controller/estoqueController.js";
+import { createUsuarios, getAllUsuarios, getByIdUsuarios, updateUsuarios } from "./src/controller/usuariosController.js";
 
 const dataService = new DataService();
 
@@ -19,35 +20,45 @@ app.get("/", (req, res) => {
 })
 
 //Rotas da entidade estoque 
-app.post("/reservas", (req, res) => create)
+app.get("/estoque", (req, res) => getAllEstoque(req, res));
 
+app.get("/estoque/:id", (req, res) => getByIdEstoque(req, res));
 
+app.get("/estoque/produto/:id", (req, res) => getEstoqueByProduct(req, res));
 
+app.post("/estoque", (req, res) => createEstoque(req, res));
 
+app.patch("/estoque/local/:id", (req, res) => updateLocal(req, res))
 
+app.patch("/estoque/quantidade/:id", (req, res) => updateQuantidade(req, res));
 
+app.delete("/estoque/:id", (req, res) => deleteEstoque(req, res));
 
-
-
-
-
-
-//Rotas da entidade produtos 
+//Rotas da entidade produtos
 app.get("/produtos", (req, res) => getAllProducts(req, res));
 
 app.get("/produtos/:id", (req, res) => getByIdProducts(req, res));
 
-app.get("")
+app.get("/produtos/tipo/:tipo", (req, res) => getByTypeProducts(req, res));
 
+app.post("/produtos", (req, res) => createProducts(req, res));
 
+app.put("/produtos/update/:id", (req, res) => updateProducts(req, res));
 
-
-
-
-
+app.delete("/produtos/:id", (req, res) => deleteProducts(req, res));
 
 //Rotas da entidade Usuário
-app.get("/Usuario", (req, res) => getAllU)
+app.get("/usuario", (req, res) => getAllUsuarios(req, res));
+
+app.get("/usuario/:id", (req, res) => getByIdUsuarios(req, res));
+
+app.post("/usuario", (req, res) => createUsuarios(req, res));
+
+app.put("/usuario/updateUsuario/:id", (req, res) => updateUsuarios(req, res));
+
+app.delete("/usuario/:id", (req, res) => deleteUsuarios(req, res));
+
+
 app.listen(PORT, () => {
     console.log((`Servidor rodando em http://localhost:${PORT}`));
     

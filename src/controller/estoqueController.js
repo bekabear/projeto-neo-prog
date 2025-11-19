@@ -1,4 +1,5 @@
-import estoqueRepository from "../repositories/EstoqueRepository.js";
+import EstoqueRepository from "../repository/EstoqueRepository.js";
+const estoqueRepository = new EstoqueRepository();
 
 // GET ALL
 export async function getAllEstoque(req, res) {

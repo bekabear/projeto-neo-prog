@@ -1,5 +1,4 @@
-import ProdutosRepository from "../repository/ProdutosRepository";
-
+import ProdutosRepository from "../repository/ProdutosRepository.js";
 const produtosRepository = new ProdutosRepository();
 
 // GET ALL

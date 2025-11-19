@@ -1,98 +1,60 @@
-import EstoqueRepository from "../database/config.js";
-
-const estoqueRepository = new EstoqueRepository();
+import { conn } from "../database/config.js";
 
 class EstoqueRepository {
+  
+  async createEstoque(produto_id, quantidade, local_armazenado, atualizado_por) {
+    const sql = `
+      INSERT INTO estoque (produto_id, quantidade, local_armazenado, atualizado_por)
+      VALUES (?, ?, ?, ?)
+    `;
 
-  // Criar um registro de estoque
-  async createEstoque(req, res) {
-    try {
-      const { produto_id, quantidade, local_armazenado, atualizado_por } = req.body;
+    const [result] = await conn.execute(sql, [
+      produto_id,
+      quantidade,
+      local_armazenado,
+      atualizado_por
+    ]);
 
-      if (!produto_id || !quantidade || !local_armazenado || !atualizado_por) {
-        return res.status(400).json({ error: "Campos obrigatórios faltando" });
-      }
-
-      const novoEstoque = await estoqueRepository.create({
-        produto_id,
-        quantidade,
-        local_armazenado,
-        atualizado_por
-      });
-
-      return res.status(201).json(novoEstoque);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
+    return { id: result.insertId, produto_id, quantidade, local_armazenado, atualizado_por };
   }
 
-  // Listar todo o estoque
-  async listAllEstoque(req, res) {
-    try {
-      const itens = await estoqueRepository.list();
-      return res.status(200).json(itens);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
+  async listAllEstoque() {
+    const [rows] = await conn.execute("SELECT * FROM estoque");
+    return rows;
   }
 
-  // 🔹 Buscar estoque por ID
-  async listByIdEstoque(req, res) {
-    try {
-      const { id } = req.params;
-
-      const item = await estoqueRepository.listById(id);
-
-      if (!item) {
-        return res.status(404).json({ error: "Item não encontrado" });
-      }
-
-      return res.status(200).json(item);
-
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
+  async listByIdEstoque(id) {
+    const [rows] = await conn.execute("SELECT * FROM estoque WHERE id = ?", [id]);
+    return rows[0];
   }
 
-  // 🔹 Atualizar quantidade e local do estoque
-  async updateEstoque(req, res) {
-    try {
-      const { id } = req.params;
-      const { quantidade, local_armazenado, atualizado_por } = req.body;
-
-      const atualizado = await estoqueRepo.update(id, {
-        quantidade,
-        local_armazenado,
-        atualizado_por
-      });
-
-      if (!atualizado) {
-        return res.status(404).json({ error: "Item não encontrado" });
-      }
-
-      return res.status(200).json({ message: "Estoque atualizado com sucesso" });
-
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
+  async listByProduct(produto_id) {
+    const [rows] = await conn.execute("SELECT * FROM estoque WHERE produto_id = ?", [produto_id]);
+    return rows;
   }
 
-  // 🔹 Remover item de estoque
-  async deleteEstoque(req, res) {
-    try {
-      const { id } = req.params;
+  async updateQuantidadeEstoque(id, quantidade, atualizado_por) {
+    const sql = `
+      UPDATE estoque 
+      SET quantidade = ?, atualizado_por = ?, atualizado_em = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `;
 
-      const result = await estoqueRepository.delete(id);
+    await conn.execute(sql, [quantidade, atualizado_por, id]);
+  }
 
-      if (!result) {
-        return res.status(404).json({ error: "Item não encontrado" });
-      }
+  async updateLocalEstoque(id, local_armazenado, atualizado_por) {
+    const sql = `
+      UPDATE estoque 
+      SET local_armazenado = ?, atualizado_por = ?, atualizado_em = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `;
 
-      return res.status(200).json({ message: "Item removido do estoque" });
+    await conn.execute(sql, [local_armazenado, atualizado_por, id]);
+  }
 
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
+  async deleteEstoque(id) {
+    await conn.execute("DELETE FROM estoque WHERE id = ?", [id]);
   }
 }
 
