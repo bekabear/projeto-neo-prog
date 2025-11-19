@@ -9,6 +9,7 @@ export function up(knex) {
     table.string('tipo', 100).notNullable();
     table.text('descricao').notNullable();
     table.timestamp("criado_em").defaultTo(knex.fn.now());
+    table.date("data_vencimento").nullable();
     table.timestamp("atualizado_em").defaultTo(knex.fn.now());
 
   })

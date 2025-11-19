@@ -2,13 +2,14 @@ import { conn } from "../database/config.js";
 import crypto from "node:crypto";
 
 class UsuarioRepository {
-    async createUsuarios(nome, email, tipo) {
+    async createUsuarios(nome, email, tipo, senha) {
         try {
             const usuario = conn("usuarios").insert({
                 id: crypto.randomUUID(),
                 nome,
                 email,
                 tipo,
+                senha,
             });
             return usuario;
         } catch (error){
@@ -22,7 +23,7 @@ class UsuarioRepository {
 
     async listByIdUsuarios(id) {
         try {
-            const usuario = (await conn("usuarios").where({ id })).first();
+            const usuario = await conn("usuarios").where({ id }).first();
             if (!usuario) {
                 throw new Error("Usuario não econtrado");
             }
@@ -42,14 +43,15 @@ class UsuarioRepository {
                 nome: dados.nome ?? usuario.nome, 
                 email: dados.email ?? usuario.email,
                 tipo: dados.tipo ?? usuario.tipo,
+                senha: dados.senha ?? usuario.senha,
             }
-            return await conn("clientes").where({ id }).update(updateUsuarios);
+            return await conn("usuarios").where({ id }).update(updateUsuarios);
         } catch (error) {
             throw Error(error);
         }
     }
     
-     async delete(id) {
+     async deleteUsuarios(id) {
     try {
       const usuario = await conn("usuarios").where({ id });
       if (!usuario) {

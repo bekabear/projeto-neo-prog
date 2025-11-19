@@ -2,7 +2,7 @@ import express from "express";
 import { DataService } from "./src/services/dataservice.js";
 import { createProducts, deleteProducts, getAllProducts, getByIdProducts, getByTypeProducts, updateProducts, } from "./src/controller/podutosController.js";
 import { createEstoque, deleteEstoque, getAllEstoque, getByIdEstoque, getEstoqueByProduct, updateLocal, updateQuantidade } from "./src/controller/estoqueController.js";
-import { createUsuarios, getAllUsuarios, getByIdUsuarios, updateUsuarios } from "./src/controller/usuariosController.js";
+import { createUsuarios, getAllUsuarios, getByIdUsuarios, updateUsuarios, deleteUsuarios} from "./src/controller/usuariosController.js";
 
 const dataService = new DataService();
 
@@ -24,7 +24,7 @@ app.get("/estoque", (req, res) => getAllEstoque(req, res));
 
 app.get("/estoque/:id", (req, res) => getByIdEstoque(req, res));
 
-app.get("/estoque/produto/:id", (req, res) => getEstoqueByProduct(req, res));
+app.get("/estoque/produto/:produtos_id", (req, res) => getEstoqueByProduct(req, res));
 
 app.post("/estoque", (req, res) => createEstoque(req, res));
 
@@ -48,15 +48,15 @@ app.put("/produtos/update/:id", (req, res) => updateProducts(req, res));
 app.delete("/produtos/:id", (req, res) => deleteProducts(req, res));
 
 //Rotas da entidade Usuário
-app.get("/usuario", (req, res) => getAllUsuarios(req, res));
+app.get("/usuarios", (req, res) => getAllUsuarios(req, res));
 
-app.get("/usuario/:id", (req, res) => getByIdUsuarios(req, res));
+app.get("/usuarios/:id", (req, res) => getByIdUsuarios(req, res));
 
-app.post("/usuario", (req, res) => createUsuarios(req, res));
+app.post("/usuarios", (req, res) => createUsuarios(req, res));
 
-app.put("/usuario/updateUsuario/:id", (req, res) => updateUsuarios(req, res));
+app.put("/usuarios/updateUsuario/:id", (req, res) => updateUsuarios(req, res));
 
-app.delete("/usuario/:id", (req, res) => deleteUsuarios(req, res));
+app.delete("/usuarios/:id", (req, res) => deleteUsuarios(req, res));
 
 
 app.listen(PORT, () => {

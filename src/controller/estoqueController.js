@@ -29,8 +29,8 @@ export async function getByIdEstoque(req, res) {
 // GET BY PRODUTO
 export async function getEstoqueByProduct(req, res) {
   try {
-    const { produto_id } = req.params;
-    const itens = await estoqueRepository.listByProduct(produto_id);
+    const { produtos_id } = req.params;
+    const itens = await estoqueRepository.listByProduct(produtos_id);
     return res.status(200).json(itens);
   } catch (error) {
     return res
@@ -42,10 +42,10 @@ export async function getEstoqueByProduct(req, res) {
 // CREATE
 export async function createEstoque(req, res) {
   try {
-    const { produto_id, quantidade, local_armazenado, atualizado_por } = req.body;
+    const { produtos_id, quantidade, local_armazenado, atualizado_por } = req.body;
 
     await estoqueRepository.createEstoque(
-      produto_id,
+      produtos_id,
       quantidade,
       local_armazenado,
       atualizado_por

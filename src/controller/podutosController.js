@@ -27,9 +27,7 @@ export async function getByTypeProducts(req, res) {
     const produtos = await produtosRepository.listByType(tipo);
     return res.status(200).json(produtos);
   } catch (error) {
-    return res
-      .status(400)
-      .json({ message: "GET BY TYPE", error: error.message });
+    return res.status(400).json({ message: "GET BY TYPE", error: error.message });
   }
 }
 
@@ -83,4 +81,9 @@ export async function deleteProducts(req, res) {
   } catch (error) {
     return res.status(400).json({ message: "DELETE", error: error.message });
   }
+
+ function formatDateMysql(date) {
+  if (!date) return null;
+  return date.replace('T', ' ').replace('Z', '').split('.')[0];
+}
 }

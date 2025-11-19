@@ -1,61 +1,124 @@
 import { conn } from "../database/config.js";
+import crypto from "node:crypto";
 
 class EstoqueRepository {
-  
-  async createEstoque(produto_id, quantidade, local_armazenado, atualizado_por) {
-    const sql = `
-      INSERT INTO estoque (produto_id, quantidade, local_armazenado, atualizado_por)
-      VALUES (?, ?, ?, ?)
-    `;
 
-    const [result] = await conn.execute(sql, [
-      produto_id,
-      quantidade,
-      local_armazenado,
-      atualizado_por
-    ]);
+  // Criar estoque
+  async createEstoque(produtos_id, quantidade, local_armazenado, atualizado_por, turnos) {
+    try {
+      const id = crypto.randomUUID();
 
-    return { id: result.insertId, produto_id, quantidade, local_armazenado, atualizado_por };
+      await conn("estoque").insert({
+        id,
+        produtos_id,
+        quantidade,
+        local_armazenado,
+        atualizado_por,
+        turnos,
+        atualizado_em: new Date()
+      });
+
+      return await this.listByIdEstoque(id);
+
+    } catch (error) {
+      throw new Error("Erro ao criar estoque: " + error.message);
+    }
   }
 
+  // Listar tudo
   async listAllEstoque() {
-    const [rows] = await conn.execute("SELECT * FROM estoque");
-    return rows;
+    try {
+      return await conn("estoque").orderBy("atualizado_em", "desc");
+    } catch (error) {
+      throw new Error("Erro ao listar estoque: " + error.message);
+    }
   }
 
+  // Buscar por ID
   async listByIdEstoque(id) {
-    const [rows] = await conn.execute("SELECT * FROM estoque WHERE id = ?", [id]);
-    return rows[0];
+    try {
+      const item = await conn("estoque").where({ id }).first();
+
+      if (!item) {
+        throw new Error("Item de estoque não encontrado");
+      }
+
+      return item;
+
+    } catch (error) {
+      throw new Error("Erro ao buscar por ID: " + error.message);
+    }
   }
 
-  async listByProduct(produto_id) {
-    const [rows] = await conn.execute("SELECT * FROM estoque WHERE produto_id = ?", [produto_id]);
-    return rows;
+  // Buscar por produto
+  async listByProduct(produtos_id) {
+    try {
+      return await conn("estoque").where({ produtos_id });
+    } catch (error) {
+      throw new Error("Erro ao buscar pelo ID do produto: " + error.message);
+    }
   }
 
+  // Atualizar quantidade
   async updateQuantidadeEstoque(id, quantidade, atualizado_por) {
-    const sql = `
-      UPDATE estoque 
-      SET quantidade = ?, atualizado_por = ?, atualizado_em = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `;
+    try {
+      const updated = await conn("estoque")
+        .where({ id })
+        .update({
+          quantidade,
+          atualizado_por,
+          atualizado_em: new Date()
+        });
 
-    await conn.execute(sql, [quantidade, atualizado_por, id]);
+      if (!updated) {
+        throw new Error("Item não encontrado para atualizar quantidade");
+      }
+
+      return await this.listByIdEstoque(id);
+
+    } catch (error) {
+      throw new Error("Erro ao atualizar quantidade: " + error.message);
+    }
   }
 
+  // Atualizar local de armazenamento
   async updateLocalEstoque(id, local_armazenado, atualizado_por) {
-    const sql = `
-      UPDATE estoque 
-      SET local_armazenado = ?, atualizado_por = ?, atualizado_em = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `;
+    try {
+      const updated = await conn("estoque")
+        .where({ id })
+        .update({
+          local_armazenado,
+          atualizado_por,
+          atualizado_em: new Date()
+        });
 
-    await conn.execute(sql, [local_armazenado, atualizado_por, id]);
+      if (!updated) {
+        throw new Error("Item não encontrado para atualizar local");
+      }
+
+      return await this.listByIdEstoque(id);
+
+    } catch (error) {
+      throw new Error("Erro ao atualizar local: " + error.message);
+    }
   }
 
+  // Deletar item
   async deleteEstoque(id) {
-    await conn.execute("DELETE FROM estoque WHERE id = ?", [id]);
+    try {
+      const deleted = await conn("estoque").where({ id }).del();
+
+      if (!deleted) {
+        throw new Error("Item não encontrado para deletar");
+      }
+
+      return { message: "Item deletado com sucesso" };
+
+    } catch (error) {
+      throw new Error("Erro ao deletar item: " + error.message);
+    }
   }
+
 }
 
 export default EstoqueRepository;

@@ -25,19 +25,19 @@ export async function getByIdUsuarios(req, res) {
 
 export async function createUsuarios(req, res) {
   try {
-    const { nome, email, tipo } = req.body;
-    await usuarioRepository.createClientes(nome, email, tipo);
+    const { nome, email, tipo, senha } = req.body;
+    await usuarioRepository.createUsuarios(nome, email, tipo, senha);
     return res.status(201).json("Usuario cadastrado com sucesso");
   } catch (error) {
     return res.status(400).json({ message: "CREATE", error: error.message });
   }
 }
-
+//Cliente
 export async function updateUsuarios(req, res) {
   try {
     const { id } = req.params;
-    const { nome, email, tipo } = req.body;
-    await usuarioRepository.updateUsuarios(id, { nome, email, tipo });
+    const { nome, email, tipo, senha } = req.body;
+    await usuarioRepository.updateUsuarios(id, { nome, email, tipo, senha });
     return res.status(200).json("Usuario atualizada");
   } catch (error) {
     return res
@@ -49,7 +49,7 @@ export async function updateUsuarios(req, res) {
 export async function deleteUsuarios(req, res) {
   try {
     const { id } = req.params;
-    await usuarioRepository.delete(id);
+    await usuarioRepository.deleteUsuarios(id);
     return res.status(200).json("Usuario deletado");
   } catch (error) {
     return res
