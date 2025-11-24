@@ -42,13 +42,14 @@ export async function getEstoqueByProduct(req, res) {
 // CREATE
 export async function createEstoque(req, res) {
   try {
-    const { produtos_id, quantidade, local_armazenado, atualizado_por } = req.body;
+    const { produtos_id, quantidade, local_armazenado, atualizado_por, turnos } = req.body;
 
     await estoqueRepository.createEstoque(
       produtos_id,
       quantidade,
       local_armazenado,
-      atualizado_por
+      atualizado_por,
+      turnos
     );
 
     return res.status(201).json("Item de estoque criado com sucesso!");
