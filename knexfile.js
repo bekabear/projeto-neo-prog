@@ -24,6 +24,9 @@ const config = {
     connection: {
       connectionString: process.env.DB_URL,
       ssl: { rejectUnauthorized: false }
+    },
+    migrations: {
+      directory: path.join("./src/database/knex/migrations")
     }
   }
 };
