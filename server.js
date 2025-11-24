@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Rota de teste 
 app.get("/", (req, res) => {
-    res.send("Seja bem vindo 😊")
+    res.send("Seja bem vindo 😊 ao Banco de dados criado por Matheus, Rebeca, Eliel")
 })
 
 //Rotas da entidade estoque 
