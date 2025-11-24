@@ -2,7 +2,13 @@ import  config  from "../../knexfile.js";
 import knex from "knex";
 
 // Conection
-export const conn = knex(config.development);
+
+import dotenv from 'dotenv'
+dotenv.config()
+
+const environment = process.env.NODE_ENV || 'development';
+
+export const conn = knex(config[environment]);
 
 conn.raw("SELECT 1")
 .then(() => {

@@ -19,6 +19,13 @@ const config = {
       directory: path.join("./src/database/knex/migrations")
     }
   },
+  production: {
+    client: 'pg',
+    connection: {
+      connectionString: process.env.DB_URL,
+      ssl: { rejectUnauthorized: false }
+    }
+  }
 };
 
 export default config
